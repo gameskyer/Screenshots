@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" href="css/BeerSlider.css">
+<style>
+    body{background-color: #272727}
+    .m {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+<body>
+
+<div id="datalist">
+
+</div>
+<div class="m">
+    <div id="slider2" class="beer-slider"  data-beer-label="低">
+        <img id="imgs" src="/template/Pictures/pubg/1/high.jpg" alt="">
+        <div class="beer-reveal" id = "slider29" data-beer-label="最高">
+            <img  id = "img" src="/template/Pictures/pubg/1/low.jpg" alt="">
+        </div>
+    </div>
+</div>
+
+<script src="JQ/jquery-1.12.4.js"></script>
+<script src="js/BeerSlider.js"></script>
+<script>
+    $(document).ready(function(){
+        $.ajax({
+            url : "/getFilePath",
+            async : false ,
+            type: 'POST',
+            // dataType : "json",
+            success: function(data) {
+
+                console.log(data);
+                var jsonFile = JSON.parse( data );
+                var i = 0;
+                var j = 0;
+                var h = 0;
+
+                for (i = 0 ;i <= jsonFile.length-1 ;i++){
+                    var btn1 = "<ul>";
+                    btn1 = btn1 + "<li id = "+jsonFile[i].Name+">"+jsonFile[i].Name+"</li>";
+                    var json2 = jsonFile[i].ToDir;
+                    var btn2 = "<ul>";
+                    for (j = 0 ;j <= json2.length-1 ;j++){
+                        var value = getDir(json2[j].DirTwo);
+                        btn2 = btn2 + "<li  id = "+json2[j].DirTwo+" onclick = picture(this)>"+value+"</li>";
+                        var file = json2[j].File;
+                        var btn3 = "<ul>";
+                        for (h = 0 ;h <= file.length-1 ;h++){
+                            var img = getImg(file[h]);
+                            btn3 = btn3 + "<li id = "+file[h]+" onclick = screenShot(this)>"+img+"</li>";
+                        }
+                       btn3 = btn3 + "</ul>";
+                       btn2 = btn2 + btn3 ;
+                    }
+                    btn2 = btn2 + "</ul>"
+
+                    btn1 = btn1 + btn2
+
+                    btn1 = btn1 + "</ul>";
+
+                    $("#datalist").append(btn1)
+                }
+
+            }
+        })
+    })
+function screenShot(element) {
+    console.log(element.id);
+    document.getElementById("imgs").src = "/"+element.id;
+    document.getElementById("slider2").setAttribute("data-beer-label",element.innerHTML)
+}
+function picture(element) {
+    console.log(element.id)
+    document.getElementById("img").src = "/"+element.id+"/low.jpg";
+    document.getElementById("slider29").setAttribute("data-beer-label","low.jpg")
+}
+function getDir(text) {
+   var dir =  text.split("\\");
+   var num = dir.length;
+   var value = dir[num-1];
+   return value
+}
+function getImg(text) {
+    var dir =  text.split("\\");
+    var num = dir.length;
+    var value = dir[num-1];
+    var img =  value.split(".");
+    var valueImg = img[0];
+    return valueImg
+}
+</script>
+
+<script>
+    // new BeerSlider(document.getElementById('slider'));
+    new BeerSlider(document.getElementById('slider2'));
+</script>
+
+
+</body>
+</html>
