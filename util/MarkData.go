@@ -1,15 +1,15 @@
 package util
 
 import (
-	"Screenshots/been"
+	"Screenshots/module"
 	"fmt"
 )
 
-func MarkData(data []been.InsertSql)[]been.Router{
+func MarkData(data []module.InsertSql) []module.Router {
 	names := SelectGroupByName()
-	var routers []been.Router
-	for _,v := range names{
-		routers = append(routers,SelectByName(v))
+	var routers []module.Router
+	for _, v := range names {
+		routers = append(routers, SelectByName(v))
 	}
 	fmt.Println(routers)
 	return routers
