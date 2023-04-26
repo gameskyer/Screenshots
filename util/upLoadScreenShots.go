@@ -4,7 +4,7 @@ import (
 	"Screenshots/module"
 	"encoding/json"
 	"fmt"
-	"github.com/astaxie/beego/client/httplib"
+	"github.com/astaxie/beego/httplib"
 	"os"
 	"path/filepath"
 	"regexp"

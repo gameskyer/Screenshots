@@ -25,66 +25,6 @@ const fileTmp = "C:\\Users\\pky\\go\\src\\Screenshots\\screenshot"
 func main() {
 	router := gin.Default()
 	router.Use(Cors())
-	//router.LoadHTMLGlob("template/**/**/**/*")
-	//router.LoadHTMLGlob("template/*")
-	//router.StaticFS("/template",http.Dir("./template"))
-	//router.POST("/getFilePath", func(c *gin.Context) {
-	//	var pictures []picture
-	//	var picture picture
-	//	var dirs []string
-	//	var todirs []string
-	//	var file []string
-	//	var paths []string
-	//	var DirTwo dirtwo
-	//
-	//	filepath.Walk("template\\Pictures", func(path string, info os.FileInfo, err error) error {
-	//		paths = append(paths, path)
-	//		return nil
-	//	})
-	//	fmt.Println("文件目录：",paths)
-	//	for _, v := range paths {
-	//		s := strings.Split(v, "\\")
-	//		if len(s) == 3{
-	//			dirs = append(dirs,v)
-	//		}else if len(s) == 4 {
-	//			todirs = append(todirs,v)
-	//		}else if len(s) == 5 {
-	//			file = append(file,v)
-	//		}
-	//	}
-	//	fmt.Printf("i=%v,j=%v,k=%v \n", len(dirs), len(todirs), len(file))
-	//	for i:= 0 ;i<= len(dirs)-1;i++{
-	//		var DirTwos []dirtwo
-	//		for j:= 0 ;j<= len(todirs)-1;j++{
-	//			var file1 []string
-	//			todir := todirs[j]
-	//			dir := dirs[i]
-	//			if strings.Index(todir,dir) != -1{
-	//				DirTwo.DirTwo = todirs[j]
-	//			}else {
-	//				continue
-	//			}
-	//			for k:= 0 ;k<= len(file)-1;k++{
-	//				if strings.Index(file[k],todirs[j]) != -1{
-	//					file1 = append(file1,file[k])
-	//				}else {
-	//					continue
-	//				}
-	//			}
-	//			DirTwo.File = file1
-	//			DirTwos = append(DirTwos,DirTwo)
-	//		}
-	//		picture.Name = strings.Split(dirs[i],"\\")[2]
-	//		picture.Dir = dirs[i]
-	//		picture.ToDir = DirTwos
-	//		pictures = append(pictures,picture)
-	//	}
-	//	pictureByte,_ := json.Marshal(pictures)
-	//	c.String(http.StatusOK, string(pictureByte))
-	//})
-	//router.GET("/file", func(c *gin.Context) {
-	//	c.HTML(http.StatusOK, "template/TR.html", gin.H{})
-	//})
 	router.POST("/getScreenshot", func(c *gin.Context) {
 		service.GetScreenshot(c)
 	})
