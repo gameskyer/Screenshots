@@ -23,7 +23,10 @@ type dirtwo struct {
 const fileTmp = "C:\\Users\\pky\\go\\src\\Screenshots\\screenshot"
 
 func main() {
+	//使用该函数，则强制日志带颜色输出，无论是在终端还是其他输出设备
+	gin.ForceConsoleColor()
 	router := gin.Default()
+	util.WatchConfig()
 	router.Use(Cors())
 	router.POST("/getScreenshot", func(c *gin.Context) {
 		service.GetScreenshot(c)
