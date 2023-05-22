@@ -43,7 +43,7 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		util.UpLoadScreenShots(constant.FileTmp)
+		service.UpLoadScreenShots(constant.FileTmp)
 		//dir, _ := ioutil.ReadDir(fileTmp)
 
 		defer os.Remove(FilePath)

@@ -10,7 +10,7 @@ type Data struct {
 	Domain string `json:"domain" db:"domain"`
 }
 
-func InsertSql(insertParm module.InsertSql) {
+func InsertSql(insertParm module.Screenshot) {
 	sqlStr := "INSERT INTO screenshot(name, url,path,scene,domain ) VALUES(?,?,?,?,?)"
 	result, err := DB.Exec(sqlStr, insertParm.Name, insertParm.Url, insertParm.Path, insertParm.Scene, insertParm.Domain)
 	if err != nil {
@@ -73,7 +73,6 @@ func SelectScreenshotBySceneAndName(name, scene string) []string {
 	fmt.Println(sqlStr)
 	var data []Data
 	DB.Select(&data, sqlStr)
-	fmt.Println(data)
 	for _, v := range data {
 		str := v.Domain + v.Path
 		screenshotData = append(screenshotData, str)
