@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Screenshots/constant"
 	"Screenshots/service"
 	"Screenshots/util"
 	"fmt"
@@ -20,8 +21,6 @@ type dirtwo struct {
 	File   []string
 }
 
-const fileTmp = "C:\\Users\\pky\\go\\src\\Screenshots\\screenshot"
-
 func main() {
 	//使用该函数，则强制日志带颜色输出，无论是在终端还是其他输出设备
 	gin.ForceConsoleColor()
@@ -34,14 +33,17 @@ func main() {
 	router.POST("/uploadScreenshots", func(c *gin.Context) {
 		var zipFile *os.File
 		zip, _ := c.FormFile("screenshots")
-		var FilePath = "C:\\Users\\pky\\go\\src\\Screenshots\\zip\\" + zip.Filename
+		var FilePath = "cache/zip/" + zip.Filename
 		zipFile, _ = os.Create(FilePath)
 		var fileByte = make([]byte, zip.Size)
 		file, _ := zip.Open()
 		file.Read(fileByte)
 		zipFile.Write(fileByte)
-		util.UnZip(FilePath, "screenshot")
-		util.UpLoadScreenShots(fileTmp)
+		err := util.UnZip(FilePath, "cache/screenshot")
+		if err != nil {
+			fmt.Println(err)
+		}
+		util.UpLoadScreenShots(constant.FileTmp)
 		//dir, _ := ioutil.ReadDir(fileTmp)
 
 		defer os.Remove(FilePath)

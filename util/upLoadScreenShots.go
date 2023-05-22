@@ -37,10 +37,12 @@ type UploadData struct {
 
 //通过正则获取指定目录下的所有图片
 func UpLoadScreenShots(filePath string) {
-	//var uploadDatas []UploadData
 	filepath.Walk(filePath, func(path string, info os.FileInfo, err error) error {
 		//正则匹配图片文件结尾
-		reg, _ := regexp.MatchString(`[^\s]+(\.(?i)(jpg|png|gif|bmp))$`, path)
+		reg, err := regexp.MatchString(`[^\s]+(\.(?i)(jpg|png|gif|bmp))$`, path)
+		if err != nil {
+			fmt.Println(err)
+		}
 		if reg {
 			upLoadFile(path)
 		}
@@ -56,9 +58,12 @@ func upLoadFile(filepath string) {
 	scene := paths[len(paths)-2][:len(paths[len(paths)-2])-1]
 	path := paths[len(paths)-3] + paths[len(paths)-2][:len(paths[len(paths)-2])-1]
 	path = strings.ReplaceAll(path, "\\", "/")
+	fmt.Println(filepath)
 	fmt.Println(path)
+	fmt.Println(name)
+	fmt.Println(scene)
 	var obj Response
-	req := httplib.Post("http://192.168.221.128:8080/group1/upload")
+	req := httplib.Post("http://" + Config.FileServerConfig.FileServerAddress + "/group1/upload")
 	//设置文件名称
 	var fileName string
 	file, _ := os.Stat(filepath)

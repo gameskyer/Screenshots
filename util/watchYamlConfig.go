@@ -14,15 +14,8 @@ import (
 var Config module.YamlConfig
 var sentryCfg *viper.Viper
 
-func init() {
-	err := ReadConfig()
-	if err != nil {
-		return
-	}
-}
-
 func ReadConfig() error {
-	content, err := ioutil.ReadFile("templates/config/Address.yaml")
+	content, err := ioutil.ReadFile(constant.ConfigPath)
 	if err != nil {
 		fmt.Print(err)
 		return err

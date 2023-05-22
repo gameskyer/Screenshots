@@ -1,16 +1,16 @@
 package module
 
 type YamlConfig struct {
-	SqlConfig        SqlConfig
-	FileServerConfig FileServerConfig
+	SqlConfig        SqlConfig        `yaml:"SqlConfig"`
+	FileServerConfig FileServerConfig `yaml:"FileServerConfig"`
 }
 
 type SqlConfig struct {
-	DbAddress  string
-	DbName     string
-	DbUser     string
-	DbPassword string
+	DbAddress  string `yaml:"DbAddress"`
+	DbName     string `yaml:"DbName"`
+	DbUser     string `yaml:"DbUser"`
+	DbPassword string `yaml:"DbPassword"`
 }
 type FileServerConfig struct {
-	FileServerAddress string
+	FileServerAddress string `yaml:"FileServerAddress"`
 }

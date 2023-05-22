@@ -16,6 +16,10 @@ var (
 )
 
 func init() {
+	err := ReadConfig()
+	if err != nil {
+		return
+	}
 	sqlConfig = Config.SqlConfig
 	mysqlConnet := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		sqlConfig.DbUser, sqlConfig.DbPassword, sqlConfig.DbAddress, sqlConfig.DbName)

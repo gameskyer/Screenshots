@@ -1,7 +1,7 @@
-sqlConfig :
-  dbAddress : localhost:3306
-  dbName : mydb
-  dbUser : root
-  dbPassword : 123456
-fileServerConfig :
-  fileServerAddress : 192.168.227.133
+SqlConfig:
+  DbAddress: localhost:3306
+  DbName: screenshot
+  DbUser: root
+  DbPassword: 123456
+FileServerConfig:
+  FileServerAddress: 127.0.0.1:8080
