@@ -1,71 +1,58 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"io"
-	"log"
-	"mime/multipart"
-	"net/http"
-	"os"
-	"path/filepath"
+	"reflect"
 )
 
-// Creates a new file upload http request with optional extra params
-func newfileUploadRequest(uri string, params map[string]string, paramName, path string) (*http.Request, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
+type Container struct {
+	s reflect.Value
+}
 
-	body := &bytes.Buffer{}
-	writer := multipart.NewWriter(body)
-	fmt.Printf("请求参数：%+v",params)
-	part, err := writer.CreateFormFile(paramName, filepath.Base(path))
-	if err != nil {
-		return nil, err
+func NewContainer(t reflect.Type, size int) *Container {
+	if size <= 0 {
+		size = 64
 	}
-	_, err = io.Copy(part, file)
-
-	for key, val := range params {
-		_ = writer.WriteField(key, val)
-
+	return &Container{
+		s: reflect.MakeSlice(reflect.SliceOf(t), 0, size),
 	}
-	err = writer.Close()
-	if err != nil {
-		return nil, err
+}
+func (c *Container) Put(val interface{}) error {
+	if reflect.ValueOf(val).Type() != c.s.Type().Elem() {
+		return fmt.Errorf("Put: cannot put a %T into a slice of %s",
+			val, c.s.Type().Elem())
 	}
-
-	req, err := http.NewRequest("POST", uri, body)
-	req.Header.Set("Content-Type", writer.FormDataContentType())
-	return req, err
+	c.s = reflect.Append(c.s, reflect.ValueOf(val))
+	return nil
+}
+func (c *Container) Get(refval interface{}) error {
+	if reflect.ValueOf(refval).Kind() != reflect.Ptr ||
+		reflect.ValueOf(refval).Elem().Type() != c.s.Type().Elem() {
+		return fmt.Errorf("Get: needs *%s but got %T", c.s.Type().Elem(), refval)
+	}
+	reflect.ValueOf(refval).Elem().Set(c.s.Index(0))
+	c.s = c.s.Slice(1, c.s.Len())
+	return nil
 }
 
 func main() {
+	f1 := 1
+	f2 := 1.41421356237
 
-	extraParams := map[string]string{
-		"output":"json2",
-		"scene":"",
-		"path":"",
+	c := NewContainer(reflect.TypeOf(f1), 16)
+
+	if err := c.Put(f1); err != nil {
+		panic(err)
 	}
-	request, err := newfileUploadRequest("http://192.168.18.128:8080/group1/upload", extraParams, "file", "C:\\Users\\pky\\go\\src\\Screenshots\\screenshot\\destiny2\\3\\low.jpg")
-	if err != nil {
-		log.Fatal(err)
+	if err := c.Put(f2); err != nil {
+		panic(err)
 	}
-	client := &http.Client{}
-	resp, err := client.Do(request)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		body := &bytes.Buffer{}
-		_, err := body.ReadFrom(resp.Body)
-		if err != nil {
-			log.Fatal(err)
-		}
-		resp.Body.Close()
-		fmt.Println(resp.StatusCode)
-		fmt.Println(resp.Header)
-		fmt.Println(body)
+
+	g := 0.0
+
+	if err := c.Get(&g); err != nil {
+		panic(err)
 	}
+	fmt.Printf("%v (%T)\n", g, g) //3.1415926 (float64)
+	fmt.Println(c.s.Index(0))     //1.4142135623
 }

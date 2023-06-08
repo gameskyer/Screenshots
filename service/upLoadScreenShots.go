@@ -60,16 +60,14 @@ func upLoadFile(filepath string) {
 	scene := paths[len(paths)-2][:len(paths[len(paths)-2])-1]
 	path := paths[len(paths)-3] + paths[len(paths)-2][:len(paths[len(paths)-2])-1]
 	path = strings.ReplaceAll(path, "\\", "/")
-	fmt.Println(filepath)
-	fmt.Println(path)
-	fmt.Println(name)
-	fmt.Println(scene)
+
 	var obj Response
 	req := httplib.Post("http://" + util.Config.FileServerConfig.FileServerAddress + "/group1/upload")
 	//设置文件名称
 	var fileName string
 	file, _ := os.Stat(filepath)
 	fileName = file.Name()
+
 	//上传文件
 	req.PostFile("file", filepath) //注意不是全路径
 	req.Param("filename", fileName)
@@ -81,12 +79,14 @@ func upLoadFile(filepath string) {
 	fmt.Println(string(databyte))
 	//上传文件后删除文件
 	os.Remove(filepath)
+	fileNames := strings.Split(fileName, ".")
 	var insertModle module.Screenshot
 	insertModle.Name = name
 	insertModle.Scene = scene
 	insertModle.Path = obj.Data.Path
 	insertModle.Url = strings.ReplaceAll(obj.Data.Url, "\\u0026", "&")
 	insertModle.Domain = obj.Data.Domain
+	insertModle.FileName = fileNames[0]
 	dao.InsertSql(insertModle)
 
 }

@@ -8,5 +8,5 @@ type ScreenshotModule struct {
 
 type Scene struct {
 	Path string `json:"path"  gorm:"column:path"`
-	Name string `json:"name" db:"scene"  gorm:"column:name"`
+	Name string `json:"name" db:"scene"  gorm:"column:scene"`
 }

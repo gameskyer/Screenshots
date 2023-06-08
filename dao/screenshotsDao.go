@@ -14,6 +14,7 @@ func init() {
 		"url" text not null,
 		"path" text not null,
 		"scene" text not null,
+		"fileName" text not null,
 		"domain" text not null
 	)`
 	tx := db.DB.Exec(sql)
@@ -99,7 +100,7 @@ func SelectGroupByName() []string {
 	return names
 }
 func InsertSql(insertParm module.Screenshot) {
-	tx := screenshotDB.Create(insertParm)
+	tx := screenshotDB.Create(&insertParm)
 	err := tx.Error
 	if err != nil {
 		fmt.Printf("exec failed, err:%v\n", err)
