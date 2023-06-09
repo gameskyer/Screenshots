@@ -54,6 +54,7 @@ func main() {
 	router.GET("/routerUrl", func(c *gin.Context) {
 		service.GetRoute(c)
 	})
+
 	router.Run(":8000")
 }
 func Cors() gin.HandlerFunc {

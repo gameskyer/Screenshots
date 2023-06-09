@@ -26,22 +26,22 @@ func init() {
 
 var screenshotDB = db.DB
 
-func SelectScreenshotBySceneAndName(name, scene string) []string {
-	var urls []string
+func SelectScreenshotBySceneAndName(name, scene string) []module.Screenshot {
+	//var urls []string
 	var screenshotData []module.Screenshot
 	tx := screenshotDB.Model(new(module.Screenshot))
-	tx.Select("path", "domain")
+	tx.Select("path", "domain", "fileName")
 	tx.Where("name = ? ", name).Where("scene = ?", scene)
 	tx.Scan(&screenshotData)
 	err := tx.Error
 	if err != nil {
 		util.Logger.Error(err)
 	}
-	for _, v := range screenshotData {
-		str := v.Domain + v.Path
-		urls = append(urls, str)
-	}
-	return urls
+	//for _, v := range screenshotData {
+	//	str := v.Domain + v.Path
+	//	urls = append(urls, str)
+	//}
+	return screenshotData
 }
 func GetScreenshotScene(name string) module.ScreenshotModule {
 	var router module.ScreenshotModule
